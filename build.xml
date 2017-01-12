@@ -1,0 +1,59 @@
+<project name="TMobileApp" default="main" basedir=".">
+    <description>
+        Team Mobile Application 
+    </description>
+
+  <property name="src.dir" location="src" />
+  <property name="build.dir" location="build" />
+  <property name="lib.dir" location="lib" />
+  <property name="dist.dir" location="dist" />
+  <property name="docs.dir" location="docs" />
+  <property name="buildlib.dir" location="${build.dir}\lib" />
+  <property name="buildmeta.dir" location="${build.dir}\META-INF" />
+	
+  <property name="app.ver" value="1.0"/>
+  <property name="app.name" value="TMobileApp"/>
+  <property name="jar.name" value="${app.name}-${app.ver}.jar"/>
+	
+  <path id="app.classpath">
+    <fileset dir="${lib.dir}" includes="*.jar"/>
+  </path>	
+	
+  <target name="clean" description="Clean Up" >
+	<delete dir="${build.dir}" />
+	<delete dir="${docs.dir}" />
+	<delete dir="${dist.dir}" />
+  </target>
+
+  <target name="makedir" description="Make Directories" >
+	<mkdir dir="${build.dir}"/>
+	<mkdir dir="${docs.dir}"/>
+	<mkdir dir="${dist.dir}"/>
+	<mkdir dir="${buildlib.dir}"/>
+	<mkdir dir="${buildmeta.dir}"/>
+  	<copy todir="${buildlib.dir}">
+  	  <fileset dir="${lib.dir}"/>
+  	</copy>
+  	<copy todir="${buildmeta.dir}">
+  	  <fileset dir="${src.dir}\META-INF"/>
+  	</copy>
+  </target>
+
+  <target name="compile" description="Compile" >
+	<javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="app.classpath" includeantruntime="false"></javac>
+  </target>
+
+  <target name="jar" depends="compile" description='Create Distribution Jar'>
+  	<jar destfile="${dist.dir}\${jar.name}" basedir="${build.dir}">
+  		<manifest>
+  			<attribute name="Main-Class" value="com.tmobile.MobileSubscribers" />
+  			<attribute name='Implementation-Version' value='${app.ver}'/> 
+            <attribute name='Implementation-Title' value='${app.name}' />
+  		</manifest>
+  	</jar>
+  </target>
+		
+  <target name="main" depends="compile, jar" description="Default AntTask">
+  </target>
+
+</project>
